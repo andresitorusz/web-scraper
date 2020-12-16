@@ -45,8 +45,11 @@ public class TokopediaItemScraper {
         js.executeScript("window.scrollBy(0,-document.body.scrollHeight)");
         Thread.sleep(2000);
 
+        // assign itemElement value, used to iterate and get items
         itemElement = driver.findElements(By.xpath("//div[@class='pcv3__container css-1bd8ct']"));
 
+
+        // get top item by user review
         for (WebElement element : itemElement) {
             // index 5 to 64 is the items sort by user rating, if we want more items, we should go to the next page
             if (itemElement.indexOf(element) > 4 && itemElement.indexOf(element) < 65 && phoneItemContainer.size() < 60) {
@@ -55,17 +58,36 @@ public class TokopediaItemScraper {
             }
         }
 
-//        // go to second page to get more items
-//        driver.findElement(By.xpath("//button[@class='css-1gpfbae-unf-pagination-item e19tp72t3']")).click();
-//        Thread.sleep(6000);
-//        for (WebElement secondPageElement : itemElement) {
-//            if (itemElement.indexOf(secondPageElement) < 40 && phoneItemContainer.size() >= 60) {
-//                phoneItemContainer.add(secondPageElement.getText());
-//                System.out.println(secondPageElement.getText());
-//            }
-//        }
+        // go to second page to get more items
+        driver.findElement(By.xpath("//button[@class='css-1gpfbae-unf-pagination-item e19tp72t3']")).click();
 
-        Thread.sleep(3000);
-        System.out.println(phoneItemContainer.size());
+        // to perform scroll down and back to top of webpage
+        // to get all items
+        js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
+        Thread.sleep(2000);
+        js.executeScript("window.scrollBy(0,-document.body.scrollHeight)");
+        Thread.sleep(2000);
+
+        // reassign itemElement value for the second page
+        itemElement = driver.findElements(By.xpath("//div[@class='pcv3__container css-1bd8ct']"));
+
+        // get top item by user review
+        Thread.sleep(4000);
+        for (WebElement secondPageElement : itemElement) {
+            if (itemElement.indexOf(secondPageElement) > 4 && itemElement.indexOf(secondPageElement) < 45 && phoneItemContainer.size() >= 60) {
+                phoneItemContainer.add(secondPageElement.getText());
+                System.out.println(secondPageElement.getText());
+            }
+        }
+
+        // build all value into 1 string array
+        StringBuilder sb = new StringBuilder();
+        sb.append(phoneItemContainer);
+        String[] sbToArray = sb.toString().split(System.getProperty("line.separator"));
+
+        // the output.csv will be exported to the project directory
+        CSVWriter writer = new CSVWriter(new FileWriter("output.csv"));
+        writer.writeNext(sbToArray);
+        writer.close();
     }
 }
