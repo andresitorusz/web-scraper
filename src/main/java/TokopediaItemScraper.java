@@ -86,7 +86,7 @@ public class TokopediaItemScraper {
         String[] sbToArray = sb.toString().split(System.getProperty("line.separator"));
 
         // the output.csv will be exported to the project directory
-        CSVWriter writer = new CSVWriter(new FileWriter("output.csv"));
+        CSVWriter writer = new CSVWriter(new FileWriter("outputTokopedia.csv"));
         writer.writeNext(sbToArray);
         writer.close();
     }

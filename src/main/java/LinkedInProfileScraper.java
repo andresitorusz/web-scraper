@@ -68,7 +68,7 @@ public class LinkedInProfileScraper {
         String[] sbToArray = sb.toString().split("TABTAB");
 
         // the output.csv will be exported to the project directory
-        CSVWriter writer = new CSVWriter(new FileWriter("output.csv"));
+        CSVWriter writer = new CSVWriter(new FileWriter("outputLinkedIn.csv"));
         writer.writeNext(sbToArray);
         writer.close();
     }
